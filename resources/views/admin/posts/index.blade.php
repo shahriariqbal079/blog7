@@ -1,6 +1,13 @@
 <x-admin-master>
     @section('content')
         <h1>All Posts</h1>
+        {{-- @if (Session::has('message')) --}}
+        @if (session('message'))
+        <div class="alert alert-danger"> {{-- {{Session::get('message')}} --}} {{session('message')}} </div>
+        @elseif(session('post-created-message'))
+        <div class="alert alert-success"> {{-- {{Session::get('message')}} --}} {{session('post-created-message')}} </div>
+
+        @endif
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -17,6 +24,7 @@
                                 <th>Image</th>
                                 <th>Created</th>
                                 <th>Updated</th>
+                                <th>Deleted</th>
                                 
                             </tr>
                         </thead>
@@ -27,6 +35,7 @@
                                 <th>Image</th>
                                 <th>Created</th>
                                 <th>Updated</th>
+                                <th>Deleted</th>
                             </tr>
                         </tfoot>
 
@@ -41,6 +50,14 @@
                             </td>
                             <td>{{$post->created_at->diffForHumans()}}</td>
                             <td>{{$post->updated_at->diffForHumans()}}</td>
+                            <td>
+                            <form method="POST" action="{{route('post.destroy', $post->id )}}" enctype="multipart/form-data">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger"> Delete </button>
+                                </form>
+                                 
+                                 </td>
                             </tr>
                                 
                             @endforeach
