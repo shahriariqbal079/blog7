@@ -6,6 +6,8 @@
         <div class="alert alert-danger"> {{-- {{Session::get('message')}} --}} {{session('message')}} </div>
         @elseif(session('post-created-message'))
         <div class="alert alert-success"> {{-- {{Session::get('message')}} --}} {{session('post-created-message')}} </div>
+        @elseif(session('post-updated-message'))
+        <div class="alert alert-success"> {{-- {{Session::get('message')}} --}} {{session('post-updated-message')}} </div>
 
         @endif
         <!-- DataTales Example -->
@@ -44,7 +46,7 @@
                             <tr>
                             <td>{{$post->id}}</td>
                             <td>{{$post->user->name}}</td>
-                            <td>{{$post->title}}</td>
+                            <td> <a href="{{route('post.edit', $post->id)}}">{{$post->title}}</a> </td>
                             <td>
                                 <div><img height="40px" src="{{$post->post_image}}" alt=""> </div>
                             </td>
