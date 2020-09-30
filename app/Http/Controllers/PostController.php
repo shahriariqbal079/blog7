@@ -9,7 +9,7 @@ use App\Post;
 class PostController extends Controller
 {
     public function index(){
-        $posts = Post::all();
+        $posts = auth()->user()->posts;
         return view('admin.posts.index', ['posts'=> $posts ]);
     }
 
@@ -18,10 +18,13 @@ class PostController extends Controller
     }
 
     public function create(){
+        $this->authorize('create', Post::class);
         return view('admin.posts.create');
     }
 
     public function store(){
+
+        $this->authorize('create', Post::class);
         $inputs = request()->validate([
             'title' => 'required|min:8|max:255',
             'post_image' => 'file',
@@ -39,6 +42,9 @@ class PostController extends Controller
     }
 
     public function destroy(Post $post, Request $request){
+
+        $this->authorize('delete', $post);
+
         $post->delete();
 
         $request ->session()->flash('message', 'Post was deleted');
@@ -48,6 +54,7 @@ class PostController extends Controller
     }
 
     public function edit(Post $post){
+        /* $this->authorize('view', $post); */
         return view('admin.posts.edit', ['post'=> $post]); 
 
     }
@@ -68,6 +75,8 @@ class PostController extends Controller
         $post->body = $inputs['body'];
 
         /* auth()->user()->posts()->save($post); */
+
+        $this->authorize('update', $post);
         $post->save();
 
 
